@@ -1,10 +1,12 @@
 import React, {useState} from 'react';
 import { Navbar, NavbarBrand } from 'reactstrap';
-import MainComponent from './components/MainComponent';
+import Menu from './MenuComponent'
 import { commingDishes } from './shared/dishes'
+import DishDetail from './DishDetailComponent'
 
-function App() {
+export default function MainComponent() {
   const [dishes, setDishes] = useState(commingDishes);
+  const [dishSelected, setDishSelected] = useState();
 
   return (
     <div>
@@ -13,9 +15,14 @@ function App() {
             <NavbarBrand href="/">Ristorante Confusion</NavbarBrand>
           </div> 
         </Navbar>
-        <MainComponent></MainComponent>
+        <Menu 
+          Dishes={dishes} 
+          dishSelected={dishSelected}
+          onClick = {() => {setDishSelected(dish)}}
+        ></Menu>
+        <DishDetail Dish ={dishSelected}></DishDetail>
     </div>
   );
 }
 
-export default App;
+ 
