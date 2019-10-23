@@ -2,7 +2,7 @@ import React from 'react';
 import getDateFormatted from '../services/getDateFormatted'
 
 export default function DishDetails({Dish}) {
-  if(!Dish.dishSelected) {
+  if(!Dish) {
     return(
       <div>
       </div>
