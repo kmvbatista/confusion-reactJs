@@ -1,24 +1,20 @@
 import React, {useState} from 'react';
 import Menu from './MenuComponent';
 import { commingDishes } from '../shared/dishes';
-import DishDetail from './DishDetailComponent';
-import Header from './HeaderComponent';
+import { Switch, Route } from 'react-router-dom'
+import Home from './HomeComponent';
 
 export default function MainComponent() {
   const [dishes, setDishes] = useState(commingDishes);
-  const [dishSelected, setDishSelected] = useState();
 
   
 
   return (
     <div>
-        <Header></Header>
-        <Menu 
-          Dishes={dishes} 
-          dishSelected={dishSelected}
-          setDishSelected = {setDishSelected}
-        ></Menu>
-        <DishDetail Dish ={dishSelected}></DishDetail>
+        <Switch>
+          <Route exact path="/" component={Home}></Route>
+          <Route path="/menu" component={() =>  <Menu Dishes={dishes}></Menu>}></Route>
+        </Switch>
     </div>
   );
 }

@@ -1,13 +1,19 @@
 import React, {useState} from 'react';
 import MainComponent from './components/MainComponent';
-import { commingDishes } from './shared/dishes'
+import Header from './components/HeaderComponent';
+import Footer from './components/FooterComponent';
+import { BrowserRouter } from 'react-router-dom'
+import './App.css';
 
 function App() {
-  const [dishes, setDishes] = useState(commingDishes);
 
   return (
     <>
-        <MainComponent></MainComponent>
+    <BrowserRouter>
+      <Header></Header>
+      <MainComponent></MainComponent>
+      <Footer></Footer>
+    </BrowserRouter>
     </>
   );
 }
