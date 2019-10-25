@@ -1,5 +1,6 @@
 import React, {useState} from 'react';
 import Menu from './MenuComponent';
+import About from './AboutusComponent'
 import { Switch, Route } from 'react-router-dom'
 import Home from './HomeComponent';
 import Contact from './ContactComponent';
@@ -41,6 +42,7 @@ export default function MainComponent() {
           <Route exact path="/menu" component={() =>  <Menu Dishes={DISHES}></Menu>}></Route>
           <Route path="/menu/:dishid" component={DishWithId}></Route>
           <Route path="/contactus" component={Contact}></Route>
+          <Route path="/aboutus" component={() => <About leaders={LEADERS}></About>}></Route>
         </Switch>
     </div>
   );
