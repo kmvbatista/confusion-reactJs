@@ -1,10 +1,11 @@
 import React, {useState} from 'react';
 import { Navbar, NavbarBrand, Jumbotron, Nav,
-   NavItem, Collapse, NavbarToggler } from 'reactstrap';
+   NavItem, Collapse, NavbarToggler, Modal, ModalBody, Button, ModalHeader } from 'reactstrap';
 import { NavLink } from 'react-router-dom';
  
 export default function Header() {
   const [isCollapseOpen, setIsCollapseOpen] = useState(false);
+  const [isModalOpen, setModalOpen] = useState(false);
   return(
     <>
       <Navbar dark expand="md">
@@ -54,6 +55,10 @@ export default function Header() {
           </div>
         </div>
       </Jumbotron>
+      <Modal>
+        <ModalHeader>Login</ModalHeader>
+        <ModalBody></ModalBody>
+      </Modal>
     </>
   );
 }

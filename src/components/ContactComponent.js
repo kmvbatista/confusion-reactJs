@@ -1,5 +1,6 @@
 import React, {useState} from 'react';
-import { Breadcrumb, BreadcrumbItem, Form, FormGroup, Input, Col, Label, Button } from 'reactstrap';
+import { Breadcrumb, BreadcrumbItem, Form, FormGroup, Input, Col, Label,
+     Button, FormFeedback } from 'reactstrap';
 import { Link } from 'react-router-dom'
 
 export default function Contact() {
@@ -9,6 +10,43 @@ export default function Contact() {
     const [email, setEmail] = useState('');
     const [isAgreeChecked, setIsAgreeChecked] = useState(false);
     const [message, setMessage] = useState("");
+    let [errorsState, setErrors] = useState({
+        firstName: '',
+        telNumber: '',
+        email:''
+    });
+    let [touched, setTouched] = useState({
+        firstName: false,
+        telNumber: false,
+        email:false
+    });
+
+    const handleBlur = (field) => (evt) => {
+        setTouched(
+            {...touched, [field]: true}
+        );
+    }
+
+    const validate = () => {
+        const errors = {
+            firstName:'',
+            telNumber:'',
+            email:''
+        }
+        if(touched.firstName && firstName.length <=2){
+            errors.firstName = 'firstname should be greater than 2 characters'
+        }
+        const reg = /^\d+$/;
+        if(touched.telNumber && !reg.test(telNumber)){
+            errors.telNumber = 'tel number should only have numbers'
+        }
+        if(touched.email && email.split('').filter(x => x ==='@').length!==1){
+            errors.email = 'invalid email'
+        }
+        return errors;
+    }
+
+    const errors = validate();
 
   return (
     <div className="container">
@@ -60,35 +98,48 @@ export default function Contact() {
                                     id="firstname"
                                     placeholder="First Name"
                                     value={firstName}
-                                    onChange={setFirstName}
+                                    valid= {errors.firstName ===''}
+                                    invalid = {errors.firstName !==''}
+                                    onChange={(event)=> {setFirstName(event.target.value)}}
+                                    onBlur={handleBlur('firstName')}
                                 >
                                 </Input>
+                                <FormFeedback>{errors.firstName}</FormFeedback>
                             </Col>
                         </FormGroup>
                         <FormGroup  row>
-                            <Label for="telnum" md={2}>First Name</Label>
+                            <Label for="telNumber" md={2}>Telefone Number</Label>
                             <Col md={10}>
                                 <Input 
                                     type="tel" 
-                                    id="telnum"
+                                    id="telNumber"
+                                    name="telNumber"
                                     placeholder="Tel. Number"
                                     value={telNumber}
-                                    onChange={setTelNumber}
+                                    valid= {errors.telNumber ===''}
+                                    invalid = {errors.telNumber !==''}
+                                    onChange={(event)=> {setTelNumber(event.target.value)}}
+                                    onBlur={handleBlur('telNumber')}
                                 >
                                 </Input>
+                                <FormFeedback>{errors.telNumber}</FormFeedback>
                             </Col>
                         </FormGroup>
                         <FormGroup  row>
-                            <Label for="telnum" md={2}>Email</Label>
+                            <Label for="email" md={2}>Email</Label>
                             <Col md={10}>
                                 <Input 
                                     type="email" 
                                     id="email"
                                     placeholder="Your Email"
                                     value={email}
-                                    onChange={setEmail}
+                                    valid= {errors.email ===''}
+                                    invalid = {errors.email !==''}
+                                    onChange={(event)=> {setEmail(event.target.value)}}
+                                    onBlur={handleBlur('email')}
                                 >
                                 </Input>
+                                <FormFeedback>{errors.email}</FormFeedback>
                             </Col>
                         </FormGroup>
                         <FormGroup  row>
@@ -114,7 +165,7 @@ export default function Contact() {
                                     id="message"
                                     name="message"
                                     value={message}
-                                    onChange={setMessage}
+                                    onChange={(event, value)=> {setMessage(value)}}
                                 ></Input>
                             </Col>
                         </FormGroup>
