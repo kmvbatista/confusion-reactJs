@@ -9,6 +9,12 @@ export default function Contact() {
         console.log('Current state is '+JSON.stringify(values));
     }
 
+    const required = val => val && val.length;
+    const maxLength = len => val => !(val) || val.length <= len;
+    const minLength = len =>  val => (val && val.length > len);
+    const isNumber = val => !isNaN(Number(val));
+    const validEmail = value => /^[A-Z0-9._%+-]+@[A-Z0-9.*-]+\.[A-Z]{2,4}$/i.test(value); 
+
     return (
         <div className="container">
             <div className="row">
@@ -60,8 +66,23 @@ export default function Contact() {
                                     className="form-control"
                                     id="firstname"
                                     placeholder="First Name"
+                                    validators={{
+                                        required,
+                                        minLength: minLength(3),
+                                        maxLength: maxLength(15)
+                                    }}
                                 >
                                 </Control.text>
+                                <Errors
+                                    className="text-danger"
+                                    model=".firstname"
+                                    show="touched"
+                                    messages={{
+                                        required:'Required! ',
+                                        minLength: 'Minimum length is 3! ',
+                                        maxLength: 'Maximum length is 15! '
+                                    }}
+                                ></Errors>
                             </Col>
                         </Row>
                         <Row className="form-group">
@@ -73,8 +94,25 @@ export default function Contact() {
                                     name="telNumber"
                                     placeholder="Tel. Number"
                                     className="form-control"
+                                    validators={{
+                                        required,
+                                        minLength: minLength(8),
+                                        maxLength: maxLength(13),
+                                        isNumber
+                                    }}
                                 >
                                 </Control.text>
+                                <Errors
+                                    show="touched"
+                                    className="text-danger"
+                                    model= ".telNumber"
+                                    messages={{
+                                        required: 'Required! ',
+                                        minLength: 'Must be greateer than 8 characters! ',
+                                        maxLength: 'Must be lower than 15 characters! ',
+                                        isNumber: 'Must be a number! '
+                                    }}
+                                />
                             </Col>
                         </Row>
                         <Row className="form-group">
@@ -85,8 +123,17 @@ export default function Contact() {
                                     id="email"
                                     placeholder="Your Email"
                                     className="form-control"
+                                    validators={{validEmail}}
                                 >
                                 </Control.text>
+                                <Errors
+                                    className="text-danger"
+                                    show="touched"
+                                    model= ".email"
+                                    messages={{
+                                        validEmail: 'Invalid email!'
+                                    }}
+                                />
                             </Col>
                         </Row>
                         <Row className="form-group">
