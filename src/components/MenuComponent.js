@@ -1,24 +1,26 @@
-import React, {useState} from 'react';
-import {Card, CardImg, CardText, CardBody, CardTitle, Breadcrumb, BreadcrumbItem} from 'reactstrap';
+import React, { useState } from 'react';
+import { Card, CardImg, CardText, CardBody, CardTitle, Breadcrumb, BreadcrumbItem } from 'reactstrap';
 import DishDetail from './DishDetailComponent';
-import { Link } from 'react-router-dom'
+import { Link } from 'react-router-dom';
+import Loading from './LoadingComponent';
 
+export default function Menu({ dishes }) {
 
-export default function Menu( {Dishes} ) {
+  debugger;
 
-  const menu = Dishes.map( dish => {
+  const menu = dishes.dishes.map(dish => {
     return (
       <>
-        <div 
-          key= {dish.id} 
-          className= "col-12 col-md-5"
+        <div
+          key={dish.id}
+          className="col-12 col-md-5"
         >
-          <Link to={`/menu/${dish.id }`}>
+          <Link to={`/menu/${dish.id}`}>
             <Card >
               <CardImg width="100%" src={dish.image} alt={dish.name}></CardImg>
-                <CardBody>
-                  <CardTitle>{dish.name}</CardTitle>
-                </CardBody>
+              <CardBody>
+                <CardTitle>{dish.name}</CardTitle>
+              </CardBody>
             </Card>
           </Link>
         </div>
@@ -27,7 +29,27 @@ export default function Menu( {Dishes} ) {
     );
   });
 
-  return(
+  if (dishes.isLoading) {
+    return (
+      <div className="container">
+        <div className="row">
+          <Loading></Loading>
+        </div>
+      </div>
+    );
+  }
+
+  if (dishes.errorMessage) {
+    return (
+      <div className="container">
+        <div className="row">
+          <h4>{dishes.errorMessage}</h4>
+        </div>
+      </div>
+    );
+  }
+
+  return (
     <div className="container">
       <div className="row">
         <Breadcrumb>
@@ -39,9 +61,9 @@ export default function Menu( {Dishes} ) {
       </div>
       <div className="col-12">
         <h3>Menu</h3>
-        <hr/>
+        <hr />
       </div>
-      <div className= "row">
+      <div className="row">
         {menu}
       </div>
     </div>

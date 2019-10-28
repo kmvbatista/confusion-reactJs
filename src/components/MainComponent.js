@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect } from 'react';
 import Menu from './MenuComponent';
 import About from './AboutusComponent'
 import { Switch, Route, withRouter } from 'react-router-dom'
@@ -6,7 +6,7 @@ import Home from './HomeComponent';
 import Contact from './ContactComponent';
 import DishDetails from './DishDetailComponent';
 import { connect } from 'react-redux';
-import  { addComment } from '../redux/ActionCreators';
+import  { addComment, fetchDishes } from '../redux/ActionCreators';
 
 const mapStateToProps = state => {
   return {
@@ -18,14 +18,22 @@ const mapStateToProps = state => {
 };
 
 const mapDispatchToProps = dispatch =>({
-  addComment: (dishId, rating, author, comment) => dispatch(addComment(dishId, rating, author, comment))
+  addComment: (dishId, rating, author, comment) => dispatch(addComment(dishId, rating, author, comment)),
+  fetchDishes: () => dispatch(fetchDishes())
 })
 
 function MainComponent(props) {
+
+  useEffect(
+    () => { props.fetchDishes()}, []
+  );
+
   const HomePage = () => {
     return (
       <Home
-        dish={props.dishes.filter(x => x.featured)[0]}
+        dishesLoading = {props.dishes.isLoading}
+        dishesErrorMessage = {props.dishes.ErrorMessage}
+        dish={props.dishes.dishes.filter(x => x.featured)[0]}
         leader={props.leaders.filter(x => x.featured)[0]}
         promotion={props.promotions.filter(x => x.featured)[0]}
       >
@@ -37,7 +45,9 @@ function MainComponent(props) {
     const dishId = parseInt(match.params.dishid);
     return (
       <DishDetails
-        dish={props.dishes.filter(x => x.id === dishId)[0]}
+        isLoading = {props.dishes.isLoading}
+        errorMessage = {props.dishes.ErrorMessage}
+        dish={props.dishes.dishes.filter(x => x.id === dishId)[0]}
         comments={props.comments.filter(comment => comment.dishId === dishId)}
         addComment ={props.addComment}
       >
@@ -49,7 +59,7 @@ function MainComponent(props) {
     <div>
       <Switch>
         <Route exact path="/" component={HomePage}></Route>
-        <Route exact path="/menu" component={() => <Menu Dishes={props.dishes}></Menu>}></Route>
+        <Route exact path="/menu" component={() => <Menu dishes={props.dishes}></Menu>}></Route>
         <Route path="/menu/:dishid" component={DishWithId}></Route>
         <Route path="/contactus" component={Contact}></Route>
         <Route path="/aboutus" component={() => <About leaders={props.leaders}></About>}></Route>

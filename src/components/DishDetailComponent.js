@@ -3,10 +3,30 @@ import getDateFormatted from '../services/getDateFormatted';
 import { Link } from 'react-router-dom';
 import {Card, CardImg, CardText, CardBody, CardTitle, Breadcrumb, BreadcrumbItem,
   Modal, ModalBody, ModalHeader, Button, Label, Row, Col} from 'reactstrap';
-import { Control, LocalForm, Errors } from 'react-redux-form'
+import { Control, LocalForm, Errors } from 'react-redux-form';
+import Loading from './LoadingComponent';
 
 export default function DishDetails(props) {
-  if(!props.dish) {
+  if(props.isLoading) {
+    return(
+      <div className="container">
+        <div className="row justify-content-center">
+          <Loading></Loading>
+        </div>
+      </div>
+    );
+  }
+  else if(props.errorMessage){
+    return(
+      <div className="container">
+      <div className="row justify-content-center">
+        <h4>{props.errorMessage}</h4>
+      </div>
+    </div>
+    );
+  }
+
+  else if(!props.dish) {
     return(
       <div>
       </div>
@@ -83,7 +103,6 @@ class CommentForm extends Component{
   }
 
   handleSubmit = (values) => {
-    debugger;
     this.props.addComment(this.props.dishId, values.rating, values.author, values.comment);
   }
   required = val => val;

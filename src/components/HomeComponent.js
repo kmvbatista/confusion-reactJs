@@ -1,5 +1,6 @@
 import React from 'react';
 import { Card, CardImg, CardText, CardBody, CardTitle, CardSubtitle } from 'reactstrap';
+import Loading from './LoadingComponent';
 
 function RenderCard({item}) {
   return(
@@ -17,6 +18,15 @@ function RenderCard({item}) {
 }
 
 export default function Home(props) {
+  if(props.dishesLoading) {
+    return(
+      <div className="container">
+        <div className="row">
+          <Loading></Loading>
+        </div>
+      </div>
+    );
+  }
   return (
     <div className="container">
       <div className="row align-items-center">
