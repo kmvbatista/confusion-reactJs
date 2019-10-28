@@ -5,7 +5,8 @@ import { Switch, Route, withRouter } from 'react-router-dom'
 import Home from './HomeComponent';
 import Contact from './ContactComponent';
 import DishDetails from './DishDetailComponent';
-import { connect } from 'react-redux'
+import { connect } from 'react-redux';
+import  { addComment } from '../redux/ActionCreators';
 
 const mapStateToProps = state => {
   return {
@@ -15,6 +16,10 @@ const mapStateToProps = state => {
     promotions: state.promotions
   }
 };
+
+const mapDispatchToProps = dispatch =>({
+  addComment: (dishId, rating, author, comment) => dispatch(addComment(dishId, rating, author, comment))
+})
 
 function MainComponent(props) {
   const HomePage = () => {
@@ -30,11 +35,11 @@ function MainComponent(props) {
 
   function DishWithId({ match }) {
     const dishId = parseInt(match.params.dishid);
-    debugger;
     return (
       <DishDetails
         dish={props.dishes.filter(x => x.id === dishId)[0]}
         comments={props.comments.filter(comment => comment.dishId === dishId)}
+        addComment ={props.addComment}
       >
       </DishDetails>
     );
@@ -53,5 +58,5 @@ function MainComponent(props) {
   );
 }
 
-export default withRouter(connect(mapStateToProps)(MainComponent))
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(MainComponent))
 

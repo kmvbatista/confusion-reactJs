@@ -15,7 +15,6 @@ export default function Header() {
   const handleLogin = (evt) => {
     console.log('kkkk')
     alert(`Name: ${document.username.value} passwor: ${document.password.value}`);
-    debugger;
     evt.preventDefault();
 
   }
