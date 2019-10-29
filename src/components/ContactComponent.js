@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
 import { Breadcrumb, BreadcrumbItem, Col, Label, Button, Row } from 'reactstrap';
 import { Link } from 'react-router-dom';
-import { Control, LocalForm, Errors } from 'react-redux-form'
+import { Control, Form, Errors } from 'react-redux-form'
 
-export default function Contact() {
+export default function Contact(props) {
 
     const handleSubmit = (values) => {
         console.log('Current state is '+JSON.stringify(values));
+        props.resetFeedbackForm();
     }
 
     const required = val => val && val.length;
@@ -56,7 +57,7 @@ export default function Contact() {
                     <h3>Send Us Feedback</h3>
                 </div>
                 <div className="col-12 col-md-9">
-                    <LocalForm onSubmit={(values) => { handleSubmit(values) }}>
+                    <Form model="feedback" onSubmit={(values) => { handleSubmit(values) }}>
                         <Row className="form-group">
                             <Label for="firstname" md={2}>First Name</Label>
                             <Col md={10}>
@@ -168,7 +169,7 @@ export default function Contact() {
                             </Button>
                             </Col>
                         </Row>
-                    </LocalForm>
+                    </Form>
                 </div>
             </div>
         </div>
