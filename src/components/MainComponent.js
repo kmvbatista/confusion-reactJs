@@ -6,7 +6,7 @@ import Home from './HomeComponent';
 import Contact from './ContactComponent';
 import DishDetails from './DishDetailComponent';
 import { connect } from 'react-redux';
-import  { addComment, fetchDishes } from '../redux/ActionCreators';
+import  { addComment, fetchDishes, fetchComments, fetchPromos, addDishes, addPromos } from '../redux/ActionCreators';
 import { actions } from 'react-redux-form';
 
 const mapStateToProps = state => {
@@ -20,6 +20,8 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch =>({
   addComment: (dishId, rating, author, comment) => dispatch(addComment(dishId, rating, author, comment)),
+  fetchComments: () => dispatch(fetchComments()),
+  fetchPromos: () => dispatch(fetchPromos()),
   fetchDishes: () => dispatch(fetchDishes()),
   resetFeedbackForm : () => { dispatch(actions.reset('feedback')); }
 })
@@ -27,17 +29,18 @@ const mapDispatchToProps = dispatch =>({
 function MainComponent(props) {
 
   useEffect(
-    () => { props.fetchDishes()}, []
+    () => { props.fetchDishes(); props.fetchPromos(); props.fetchComments()}, []
   );
 
   const HomePage = () => {
     return (
       <Home
         dishesLoading = {props.dishes.isLoading}
+        promotionsLoading = {props.promotions.isLoading}
         dishesErrorMessage = {props.dishes.ErrorMessage}
         dish={props.dishes.dishes.filter(x => x.featured)[0]}
         leader={props.leaders.filter(x => x.featured)[0]}
-        promotion={props.promotions.filter(x => x.featured)[0]}
+        promotion={props.promotions.promotions.filter(x => x.featured)[0]}
       >
       </Home>
     );
@@ -50,7 +53,7 @@ function MainComponent(props) {
         isLoading = {props.dishes.isLoading}
         errorMessage = {props.dishes.ErrorMessage}
         dish={props.dishes.dishes.filter(x => x.id === dishId)[0]}
-        comments={props.comments.filter(comment => comment.dishId === dishId)}
+        comments={props.comments.comments.filter(comment => comment.dishId === dishId)}
         addComment ={props.addComment}
       >
       </DishDetails>

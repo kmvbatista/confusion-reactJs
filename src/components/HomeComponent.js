@@ -18,7 +18,7 @@ function RenderCard({item}) {
 }
 
 export default function Home(props) {
-  if(props.dishesLoading) {
+  if(props.dishesLoading || props.promotionsLoading) {
     return(
       <div className="container">
         <div className="row">
