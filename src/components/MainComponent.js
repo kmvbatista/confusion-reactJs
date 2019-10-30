@@ -6,7 +6,7 @@ import Home from './HomeComponent';
 import Contact from './ContactComponent';
 import DishDetails from './DishDetailComponent';
 import { connect } from 'react-redux';
-import  { addComment, fetchDishes, fetchComments, fetchPromos, addDishes, addPromos } from '../redux/ActionCreators';
+import  { addComment, fetchDishes, fetchComments, fetchPromos, postComment } from '../redux/ActionCreators';
 import { actions } from 'react-redux-form';
 
 const mapStateToProps = state => {
@@ -23,7 +23,8 @@ const mapDispatchToProps = dispatch =>({
   fetchComments: () => dispatch(fetchComments()),
   fetchPromos: () => dispatch(fetchPromos()),
   fetchDishes: () => dispatch(fetchDishes()),
-  resetFeedbackForm : () => { dispatch(actions.reset('feedback')); }
+  resetFeedbackForm : () => { dispatch(actions.reset('feedback')); },
+  postComment: (dishId, rating, author, comment) => dispatch(postComment(dishId, rating, author, comment))
 })
 
 function MainComponent(props) {
@@ -55,6 +56,7 @@ function MainComponent(props) {
         dish={props.dishes.dishes.filter(x => x.id === dishId)[0]}
         comments={props.comments.comments.filter(comment => comment.dishId === dishId)}
         addComment ={props.addComment}
+        postComment={props.postComment}
       >
       </DishDetails>
     );

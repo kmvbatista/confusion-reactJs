@@ -80,7 +80,7 @@ export default function DishDetails(props) {
           </div>
           <div className="col-12 col-md-5 m-1">
             <RenderComments></RenderComments>
-            <CommentForm dishId= {props.dish.id} addComment={props.addComment}></CommentForm>
+            <CommentForm dishId= {props.dish.id} addComment={props.addComment} postComment={props.postComment}></CommentForm>
           </div>
         </div>
       </div>
@@ -103,7 +103,7 @@ class CommentForm extends Component{
   }
 
   handleSubmit = (values) => {
-    this.props.addComment(this.props.dishId, values.rating, values.author, values.comment);
+    this.props.postComment(this.props.dishId, values.rating, values.author, values.comment);
   }
   required = val => val;
   minimumLength = len => val => !val || val.length > len;
