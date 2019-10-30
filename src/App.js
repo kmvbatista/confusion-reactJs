@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import MainComponent from './components/MainComponent';
 import { BrowserRouter } from 'react-router-dom'
 import './App.css';
@@ -11,13 +11,11 @@ function App() {
   const store = ConfigureStore();
   return (
     <>
-    <Provider store={store}>
-      <BrowserRouter>
-        <Header></Header>
+      <Provider store={store}>
+        <BrowserRouter>
           <MainComponent></MainComponent>
-        <Footer></Footer>
-      </BrowserRouter>
-    </Provider>
+        </BrowserRouter>
+      </Provider>
     </>
   );
 }
