@@ -1,24 +1,44 @@
 import React from 'react';
-import { Breadcrumb, BreadcrumbItem, Card, CardBody, CardHeader, Media} from 'reactstrap';
+import { Breadcrumb, BreadcrumbItem, Card, CardBody, CardHeader, Media } from 'reactstrap';
 import { Link } from 'react-router-dom';
+import { Fade, Stagger } from 'react-animation-components'
 
 function About(props) {
-    function RenderLeader({leader}) {
-    return  (
-        <Media className="mt-5" tag="li">
-            <Media left middle>
-                <Media object src={leader.image} alt={leader.name} />
+    function RenderLeader({ leader }) {
+        return (
+            <Media className="mt-5" tag="li">
+                <Media left middle>
+                    <Media object src={leader.image} alt={leader.name} />
+                </Media>
+                <Media body className="ml-5">
+                    <Media heading>{leader.name}</Media>
+                    <h6>{leader.designation}</h6>
+                    <p>{leader.description}</p>
+                </Media>
             </Media>
-            <Media body className="ml-5">
-            <Media heading>{leader.name}</Media>
-            <h6>{leader.designation}</h6>
-            <p>{leader.description}</p>
-            </Media>
-        </Media>
-    );
+        );
     }
 
-    return(
+    function RenderLeaders({leaders}) {
+        if(leaders.errorMessage) {
+            return(
+                <div className="col-12">
+                    <h4>{leaders.errorMessage}</h4>
+                </div>
+            );
+        }
+        return (
+            <div className="col-12">
+                    <Media list>
+                        <Stagger in>
+                            {props.leaders.leaders.map(leader =><Fade> <RenderLeader leader={leader}></RenderLeader> </Fade>)}
+                        </Stagger>
+                    </Media>
+            </div>
+        );
+    }
+
+    return (
         <div className="container">
             <div className="row">
                 <Breadcrumb>
@@ -28,7 +48,7 @@ function About(props) {
                 <div className="col-12">
                     <h3>About Us</h3>
                     <hr />
-                </div>                
+                </div>
             </div>
             <div className="row row-content">
                 <div className="col-12 col-md-6">
@@ -72,11 +92,7 @@ function About(props) {
                 <div className="col-12">
                     <h2>Corporate Leadership</h2>
                 </div>
-                <div className="col-12">
-                    <Media list>
-                        {props.leaders.map(leader => <RenderLeader leader={leader}></RenderLeader>)}
-                    </Media>
-                </div>
+                <RenderLeaders leaders={props.leaders}></RenderLeaders>
             </div>
         </div>
     );
