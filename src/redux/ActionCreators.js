@@ -2,16 +2,26 @@ import * as ActionTypes from './ActionTypes';
 import baseUrl from '../shared/baseurl';
 
 export const fetchDishes = () => dispatch => {
-  debugger;
   dispatch(dishesLoading());
-  fetch(`${baseUrl}/dishes`).then(resp => resp.json())
-  .then(dishes => {
-    debugger;
-    const action =addDishes(dishes); 
-    debugger;
-    dispatch(action);
-  });
-}
+  fetch(`${baseUrl}/dishes`)
+  .then(response => {
+    if (response.ok) {
+      return response;
+    } else {
+      var error = new Error('Error ' + response.status + ': ' + response.statusText);
+      error.response = response;
+      throw error;
+    }
+  },
+  error => {
+        throw new Error(error.message);
+  })
+.then(response => response.json())
+.then(dishes => {dispatch(addDishes(dishes))})
+.catch(error =>  dispatch({type: ActionTypes.DISHES_FAILED,
+  payload: error.message}));
+};
+
 export const dishesLoading = () => ({
   type: ActionTypes.DISHES_LOADING
 });
@@ -27,11 +37,26 @@ export const dishesFailed = (errorMessage) => ({
 });
 
 export const fetchComments = () => dispatch => {
-  debugger;
   dispatch(commentsLoading());
-  fetch(`${baseUrl}/comments`).then(resp => resp.json())
-  .then(comments => dispatch(addComments(comments)))
-}
+  fetch(`${baseUrl}/comments`)//.then(resp => resp.json())
+  //.then(comments => {dispatch(addComments(comments))})
+  .then(response => {
+    if (response.ok) {
+      return response;
+    } else {
+      var error = new Error('Error ' + response.status + ': ' + response.statusText);
+      error.response = response;
+      throw error;
+    }
+  },
+  error => {
+    throw new Error(error.message);
+  })
+.then(response => response.json())
+.then(comments => {dispatch(addComments(comments))})
+.catch(error =>  dispatch({type: ActionTypes.COMMENTS_FAILED,
+  payload: error.message}));
+};
 
 export const commentsLoading = () => ({
   type: ActionTypes.COMMENTS_LOADING
@@ -48,11 +73,26 @@ export const commentsFailed = (errorMessage) => ({
 });
 
 export const fetchPromos = () => dispatch => {
-  debugger;
   dispatch(promosLoading());
-  fetch(`${baseUrl}/promotions`).then(resp => resp.json())
-  .then(promotions => dispatch(addPromos(promotions)))
-}
+   fetch(`${baseUrl}/promotions`)//.then(resp => resp.json())
+  // .then(promotions => dispatch(addPromos(promotions)))
+  .then(response => {
+    if (response.ok) {
+      return response;
+    } else {
+      var error = new Error('Error ' + response.status + ': ' + response.statusText);
+      error.response = response;
+      throw error;
+    }
+  },
+  error => {
+        throw error;
+  })
+.then(response => response.json())
+.then(promotions => dispatch(addPromos(promotions)))
+.catch(error =>  dispatch({type: ActionTypes.PROMOS_FAILED,
+  payload: error.message}));
+};
 
 export const addPromos = (promos) => ({
   type: ActionTypes.ADD_PROMOS,
@@ -101,9 +141,78 @@ export const postComment = (dishId, rating, author, comment) => (dispatch) => {
       }
     },
     error => {
-          throw error;
+      throw new Error(error.message);
     })
   .then(response => response.json())
   .then(response => dispatch(addComment(response)))
   .catch(error =>  { console.log('post comments', error.message); alert('Your comment could not be posted\nError: '+error.message); });
 };
+
+export const fetchLeaders = () => dispatch => {
+  dispatch(leadersLoading());
+  fetch(`${baseUrl}/leaders`).then(response => {
+    if (response.ok) {
+      return response;
+    } else {
+      var error = new Error('Error ' + response.status + ': ' + response.statusText);
+      error.response = response;
+      throw error;
+    }
+  },
+  error => {
+    throw new Error(error.message);
+  })
+.then(response => response.json())
+.then(response => {dispatch(addLeaders(response))})
+.catch(error =>  { dispatch({type: ActionTypes.LEADERS_FAILED, payload: error.message})});
+};
+
+export const addLeaders = (leaders) => ({
+  type: ActionTypes.FETCH_LEADERS,
+  payload: leaders
+});
+
+export const leadersLoading = () => ({
+  type: ActionTypes.LEADERS_LOADING
+});
+
+export const postFeedback = (firstName, telNumber, email, agree, message) => (dispatch) => {
+  debugger;
+  const newFeedback = {
+    firstName,
+    telNumber,
+    email,
+    agree,
+    message
+  };
+  
+  return fetch(baseUrl + '/ comments', {
+      method: "POST",
+      body: JSON.stringify(newFeedback),
+      headers: {
+        "Content-Type": "application/json"
+      },
+      credentials: "same-origin"
+  })
+  .then(response => {
+      if (response.ok) {
+        return response;
+      } else {
+        var error = new Error('Error ' + response.status + ': ' + response.statusText);
+        error.response = response;
+        throw error;
+      }
+    },
+    error => {
+      throw new Error(error.message);
+    })
+  .then(response => response.json())
+  .then(createdFeedback => {
+    dispatch(addFeedback(createdFeedback));
+    console.log(createdFeedback);
+    alert(JSON.stringify(createdFeedback))
+  })
+  .catch(error =>  { console.log('post comments', error.message); 
+  alert('Your comment could not be posted\nError: '+error.message); });
+};
+const addFeedback = (createdFeedback) => ({type: ActionTypes.LEADERS_LOADING, payload: createdFeedback});

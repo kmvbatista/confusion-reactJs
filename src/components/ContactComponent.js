@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
 import { Breadcrumb, BreadcrumbItem, Col, Label, Button, Row } from 'reactstrap';
 import { Link } from 'react-router-dom';
-import { Control, Form, Errors } from 'react-redux-form'
+import { Control, Form, Errors } from 'react-redux-form';
+import { postFeedback } from '../redux/ActionCreators'
 
 export default function Contact(props) {
 
-    const handleSubmit = (values) => {
-        console.log('Current state is '+JSON.stringify(values));
-        props.resetFeedbackForm();
+    const handleSubmit = (values ) => {
+        postFeedback(values.firstname, values.telNumber, values.email, values.agree, values.message);
     }
 
     const required = val => val && val.length;

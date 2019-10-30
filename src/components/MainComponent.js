@@ -6,7 +6,7 @@ import Home from './HomeComponent';
 import Contact from './ContactComponent';
 import DishDetails from './DishDetailComponent';
 import { connect } from 'react-redux';
-import  { addComment, fetchDishes, fetchComments, fetchPromos, postComment } from '../redux/ActionCreators';
+import  { addComment, fetchDishes, fetchComments, fetchPromos, postComment, fetchLeaders } from '../redux/ActionCreators';
 import { actions } from 'react-redux-form';
 import { TransitionGroup, CSSTransition } from 'react-transition-group';
 import Header from './HeaderComponent';
@@ -26,6 +26,7 @@ const mapDispatchToProps = dispatch =>({
   fetchComments: () => dispatch(fetchComments()),
   fetchPromos: () => dispatch(fetchPromos()),
   fetchDishes: () => dispatch(fetchDishes()),
+  fetchLeaders: () => dispatch(fetchLeaders()),
   resetFeedbackForm : () => { dispatch(actions.reset('feedback')); },
   postComment: (dishId, rating, author, comment) => dispatch(postComment(dishId, rating, author, comment))
 })
@@ -33,7 +34,7 @@ const mapDispatchToProps = dispatch =>({
 function MainComponent(props) {
 
   useEffect(
-    () => { props.fetchDishes(); props.fetchPromos(); props.fetchComments()}, []
+    () => { props.fetchDishes(); props.fetchPromos();  props.fetchComments(); props.fetchLeaders()}, []
   );
 
   const HomePage = () => {
@@ -43,8 +44,10 @@ function MainComponent(props) {
         promotionsLoading = {props.promotions.isLoading}
         dishesErrorMessage = {props.dishes.ErrorMessage}
         dish={props.dishes.dishes.filter(x => x.featured)[0]}
-        leader={props.leaders.filter(x => x.featured)[0]}
+        leader={props.leaders.leaders.filter(x => x.featured)[0]}
         promotion={props.promotions.promotions.filter(x => x.featured)[0]}
+        leaders={props.leaders.leaders}
+        leadersLoading={props.leaders.isLoading}
       >
       </Home>
     );
@@ -75,7 +78,7 @@ function MainComponent(props) {
             <Route exact path="/menu" component={() => <Menu dishes={props.dishes}></Menu>}></Route>
             <Route path="/menu/:dishid" component={DishWithId}></Route>
             <Route path="/contactus" component={() => <Contact resetFeedbackForm={props.resetFeedbackForm}></Contact>}></Route>
-            <Route path="/aboutus" component={() => <About leaders={props.leaders}></About>}></Route>
+            <Route path="/aboutus" component={() => <About leaders={props.leaders.leaders}></About>}></Route>
           </Switch>
         </CSSTransition>
       </TransitionGroup>

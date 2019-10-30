@@ -6,8 +6,6 @@ import Loading from './LoadingComponent';
 
 export default function Menu({ dishes }) {
 
-  debugger;
-
   const menu = dishes.dishes.map(dish => {
     return (
       <>
@@ -15,8 +13,8 @@ export default function Menu({ dishes }) {
           key={dish.id}
           className="col-12 col-md-5"
         >
-          <Link to={`/menu/${dish.id}`}>
-            <Card >
+          <Link to={`/menu/${dish.id}`} key={dish.id}>
+            <Card key={dish.id}>
               <CardImg width="100%" src={dish.image} alt={dish.name}></CardImg>
               <CardBody>
                 <CardTitle>{dish.name}</CardTitle>

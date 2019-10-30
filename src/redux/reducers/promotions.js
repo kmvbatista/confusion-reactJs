@@ -10,7 +10,7 @@ const Promotions= (state= {
       return {...state, isLoading: false, promotions: action.payload, errorMessage: null}
     case ActionTypes.PROMOS_FAILED:
       return {...state, isLoading: false, promotions: [], errorMessage: action.payload}
-    case ActionTypes.PROMOS_FAILED:
+    case ActionTypes.PROMOS_LOADING:
       return {...state, isLoading: true, promotions: [], errorMessage: null}
     default:
       return state;
